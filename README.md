@@ -9,8 +9,9 @@ This documentation is for the Anger performing robot. This robot plays the part 
 
 
 ## Progress Reports <a name="ProgressReports"></a>
+1. [Progress Report 1](#report1)
 
-### Progress Report 1 
+### Progress Report 1 <a name="report1"></a>
 
 **14th of Nov 2022**
 
@@ -21,7 +22,7 @@ The next step was to assemble the platform! Aaaand TADA
 
 ![](/platform2.png)
 
-### Progress Report 2
+### Progress Report 2 <a name="report2"></a>
 
 **21st of Nov 2022**
 
