@@ -1,5 +1,5 @@
 # Anger
-### Performing Robots Fall 2022: Dhabia, Joseph 
+### Performing Robots Class @ NYUAD Fall 2022: Dhabia, Joseph 
 
 This documentation is for the Anger performing robot. This robot plays the part of the emotion "Anger". 
 
@@ -9,6 +9,8 @@ This documentation is for the Anger performing robot. This robot plays the part 
 
 
 ## Progress Reports <a name="ProgressReports"></a>
+These progress reports are added as progress on the robot is being made. The goal is to make at least two entries ever week to show the development and document the building process. 
+
 1.[Progress Report 1](#report1)
 
 2.[Progress Report 2](#report2)
