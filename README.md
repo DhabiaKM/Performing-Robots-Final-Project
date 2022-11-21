@@ -9,7 +9,8 @@ This documentation is for the Anger performing robot. This robot plays the part 
 
 
 ## Progress Reports <a name="ProgressReports"></a>
-1. [Progress Report 1](#report1)
+1.[Progress Report 1](#report1)
+2.[Progress Report 2](#report2)
 
 ### Progress Report 1 <a name="report1"></a>
 
