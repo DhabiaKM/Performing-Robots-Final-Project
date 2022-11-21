@@ -1,5 +1,6 @@
 # Anger
-### Performing Robots Class @ NYUAD Fall 2022: Dhabia, Joseph 
+### Performing Robots Class by Professor Michael Shiloh @ NYUAD 
+### Fall 2022: Dhabia, Joseph 
 
 This documentation is for the Anger performing robot. This robot plays the part of the emotion "Anger". 
 
