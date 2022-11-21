@@ -27,4 +27,4 @@ The next step was to assemble the platform! Aaaand TADA
 
 We started building our robot! We found L shaped cardboard pieces around the lab and sawed them to a unifrom size. These pieces will form our robot's skeleton. Then using supports between each L shaped corner piece, we glued them onto the platform! 
 
-ADD IMAGE HERE
+![](/images/skeleton1.jpg)
