@@ -16,9 +16,10 @@ This documentation is for the Anger performing robot. This robot plays the part 
 
 We started by building the base. We cut a piece of wood at the scene shop and sanded it down to make smooth edges. Before adding the motors, we also created openings for the wheels to fit in.
 
-ADD IMAGES
+![]()
+The next step was to assemble the platform! Aaaand TADA
 
-The next step was to assemble the platform! Aaaand TADA 
+![]()
 
 ### Progress Report 2
 
