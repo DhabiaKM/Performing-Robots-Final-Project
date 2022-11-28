@@ -47,11 +47,11 @@ We started building our robot! We found L shaped cardboard pieces around the lab
 
 This week's progress was very slow and a little bit disappointing. We had a final project due during the weekend which meant we couldn't do much. We attached cardboard supports on each corner to be able to glue on the body.
 
-![](/images/supports1.jpeg)
-![](/images/supports2.jpeg)
+![](/supports1.jpeg)
+![](/supports2.jpeg)
 
 We also found a big cardboard piece that we want to use for the body of the robot. 
-![](/images/body1.jpeg)
+![](/body1.jpeg)
 
 **Goals for This Upcoming Week**:
 - Finish the Body
