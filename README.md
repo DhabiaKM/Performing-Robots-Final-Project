@@ -35,6 +35,7 @@ The next step was to assemble the platform! Aaaand TADA
 
 We started building our robot! We found L shaped cardboard pieces around the lab and sawed them to a unifrom size. These pieces will form our robot's skeleton. Then using supports between each L shaped corner piece, we glued them onto the platform! 
 
+<<<<<<< Updated upstream
 ![](/skeleton1.png)
 
 ## Final Robot Version <a name="Final"></a>
@@ -43,3 +44,28 @@ We started building our robot! We found L shaped cardboard pieces around the lab
 ## Final Robot Performance <a name="Performace"></a>
 
 ## Reflection <a name="FinalReflection"></a>
+=======
+![](/images/skeleton1.png)
+
+
+### Progress Report 3
+
+**27th of Nov 2022**
+
+This week's progress was very slow and a little bit disappointing. We had a final project due during the weekend which meant we couldn't do much. We attached cardboard supports on each corner to be able to glue on the body.
+
+![](/images/supports1.jpeg)
+![](/images/supports2.jpeg)
+
+We also found a big cardboard piece that we want to use for the body of the robot. 
+![](/images/body1.jpeg)
+
+
+[Goals for This Upcoming Week]:
+- Finish the Body
+- Finish the servo motor connections
+- Make sure all the new servo motor attachments work
+
+
+
+>>>>>>> Stashed changes
