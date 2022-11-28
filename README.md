@@ -14,9 +14,12 @@ This documentation is for the Anger performing robot. This robot plays the part 
 ## Progress Reports <a name="ProgressReports"></a>
 These progress reports are added as progress on the robot is being made. The goal is to make at least two entries ever week to show the development and document the building process. 
 
-1.[Progress Report 1](#report1)
+1. [Progress Report 1](#report1)
+2. [Progress Report 2](#report2)
+3. [Progress Report 3](#report3)
+4. [Progress Report 4](#report4)
 
-2.[Progress Report 2](#report2)
+
 
 ### Progress Report 1 <a name="report1"></a>
 
@@ -35,20 +38,9 @@ The next step was to assemble the platform! Aaaand TADA
 
 We started building our robot! We found L shaped cardboard pieces around the lab and sawed them to a unifrom size. These pieces will form our robot's skeleton. Then using supports between each L shaped corner piece, we glued them onto the platform! 
 
-<<<<<<< Updated upstream
 ![](/skeleton1.png)
 
-## Final Robot Version <a name="Final"></a>
-
-
-## Final Robot Performance <a name="Performace"></a>
-
-## Reflection <a name="FinalReflection"></a>
-=======
-![](/images/skeleton1.png)
-
-
-### Progress Report 3
+### Progress Report 3 <a name="report3"></a>
 
 **27th of Nov 2022**
 
@@ -60,12 +52,18 @@ This week's progress was very slow and a little bit disappointing. We had a fina
 We also found a big cardboard piece that we want to use for the body of the robot. 
 ![](/images/body1.jpeg)
 
-
-[Goals for This Upcoming Week]:
+**Goals for This Upcoming Week**:
 - Finish the Body
 - Finish the servo motor connections
 - Make sure all the new servo motor attachments work
 
+### Progress Report 4 <a name="report4"></a>
+
+## Final Robot Version <a name="Final"></a>
 
 
->>>>>>> Stashed changes
+## Final Robot Performance <a name="Performace"></a>
+
+## Reflection <a name="FinalReflection"></a>
+
+
