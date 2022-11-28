@@ -18,6 +18,7 @@ These progress reports are added as progress on the robot is being made. The goa
 2. [Progress Report 2](#report2)
 3. [Progress Report 3](#report3)
 4. [Progress Report 4](#report4)
+5. [Progress Report 5](#report5)
 
 
 
@@ -58,6 +59,9 @@ We also found a big cardboard piece that we want to use for the body of the robo
 - Make sure all the new servo motor attachments work
 
 ### Progress Report 4 <a name="report4"></a>
+
+### Progress Report 5 <a name="report5"></a>
+
 
 ## Final Robot Version <a name="Final"></a>
 
