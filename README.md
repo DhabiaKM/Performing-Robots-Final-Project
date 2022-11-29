@@ -73,6 +73,10 @@ Today we had to take off our supports and add more support to them, as we found 
 
 Big progress made today! We drilled holes to place the battery with zip-ties on the platform, we also secured the the supports even further with cardboard and hot glue from all 8 sides(2 side per support). After this, we cut the correct length and width for the front and sides of our robot.
 
+![](/batterpack.jpeg)
+![](/supports3.jpeg)
+![](/measuring.jpeg)
+![](/bottombody.jpeg)
 
 
 ## Final Robot Version <a name="Final"></a>
