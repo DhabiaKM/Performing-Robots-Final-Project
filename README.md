@@ -60,7 +60,19 @@ We also found a big cardboard piece that we want to use for the body of the robo
 
 ### Progress Report 4 <a name="report4"></a>
 
+**28th of November 2022**
+
+Today we had to take off our supports and add more support to them, as we found out that there was no way for us to stabilize them using only hot glue. The Professor helped us bend the brackets back to shape. We drilled holes into the wooden platform and into the supports (after marking out spots, of course).
+
+![](/brackets1.jpeg)
+![](/brackets2.jpeg)
+
 ### Progress Report 5 <a name="report5"></a>
+
+**29th of November 2022**
+
+Big progress made today! We drilled holes to place the battery with zip-ties on the platform, we also secured the the supports even further with cardboard and hot glue from all 8 sides(2 side per support). After this, we cut the correct length and width for the front and sides of our robot.
+
 
 
 ## Final Robot Version <a name="Final"></a>
