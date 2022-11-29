@@ -71,12 +71,17 @@ Today we had to take off our supports and add more support to them, as we found 
 
 **29th of November 2022**
 
-Big progress made today! We drilled holes to place the battery with zip-ties on the platform, we also secured the the supports even further with cardboard and hot glue from all 8 sides(2 side per support). After this, we cut the correct length and width for the front and sides of our robot.
+Big progress made today! We drilled holes to place the battery with zip-ties on the platform, we also secured the the supports even further with cardboard and hot glue from all 8 sides(2 side per support). After this, we cut the correct length and width for the front and sides of our robot. Then we secured everything with hot glue.
 
 ![](/batterpack.jpeg)
 ![](/supports3.jpeg)
 ![](/measuring.jpeg)
 ![](/bottombody.jpeg)
+
+
+**Goals to Work on Next**:
+- Add cardboard brackets to secure the body cardboard piece to our supports.
+- Add the servos and find the clothes for the robot.
 
 
 ## Final Robot Version <a name="Final"></a>
