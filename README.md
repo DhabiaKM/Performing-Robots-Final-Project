@@ -83,6 +83,18 @@ Big progress made today! We drilled holes to place the battery with zip-ties on 
 - Add cardboard brackets to secure the body cardboard piece to our supports.
 - Add the servos and find the clothes for the robot.
 
+### Progress Report 6 <a name="report6"></a>
+
+**30th of November 2022**
+
+For today, we finished and added quite a few things to the robot: 
+- The Head.
+- The Arms.
+- Supports to the base.
+- Shelf.
+- A door for the back of the robot.
+
+
 
 ## Final Robot Version <a name="Final"></a>
 
