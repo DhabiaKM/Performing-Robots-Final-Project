@@ -19,6 +19,7 @@ These progress reports are added as progress on the robot is being made. The goa
 3. [Progress Report 3](#report3)
 4. [Progress Report 4](#report4)
 5. [Progress Report 5](#report5)
+6. [Progress Report 6](#report6)
 
 
 
