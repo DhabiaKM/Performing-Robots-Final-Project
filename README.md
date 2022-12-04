@@ -29,10 +29,10 @@ These progress reports are added as progress on the robot is being made. The goa
 
 We started by building the base. We cut a piece of wood at the scene shop and sanded it down to make smooth edges. Before adding the motors, we also created openings for the wheels to fit in.
 
-![](/platform1.png)
+![](/media/platform1.png)
 The next step was to assemble the platform! Aaaand TADA
 
-![](/platform2.png)
+![](/media/platform2.png)
 
 ### Progress Report 2 <a name="report2"></a>
 
@@ -40,7 +40,7 @@ The next step was to assemble the platform! Aaaand TADA
 
 We started building our robot! We found L shaped cardboard pieces around the lab and sawed them to a unifrom size. These pieces will form our robot's skeleton. Then using supports between each L shaped corner piece, we glued them onto the platform! 
 
-![](/skeleton1.png)
+![](/media/skeleton1.png)
 
 ### Progress Report 3 <a name="report3"></a>
 
@@ -48,11 +48,11 @@ We started building our robot! We found L shaped cardboard pieces around the lab
 
 This week's progress was very slow and a little bit disappointing. We had a final project due during the weekend which meant we couldn't do much. We attached cardboard supports on each corner to be able to glue on the body.
 
-![](/supports1.jpeg)
-![](/supports2.jpeg)
+![](/media/supports1.jpeg)
+![](/media/supports2.jpeg)
 
 We also found a big cardboard piece that we want to use for the body of the robot. 
-![](/body1.jpeg)
+![](/media/body1.jpeg)
 
 **Goals for This Upcoming Week**:
 - Finish the Body
@@ -65,19 +65,19 @@ We also found a big cardboard piece that we want to use for the body of the robo
 
 Today we had to take off our supports and add more support to them, as we found out that there was no way for us to stabilize them using only hot glue. The Professor helped us bend the brackets back to shape. We drilled holes into the wooden platform and into the supports (after marking out spots, of course).
 
-![](/brackets1.jpeg)
+![](/media/brackets1.jpeg)
 ![](/brackets2.jpeg)
 
-### Progress Report 5 <a name="report5"></a>
+### Progress Report 5 <a name="report5"></media/a>
 
 **29th of November 2022**
 
 Big progress made today! We drilled holes to place the battery with zip-ties on the platform, we also secured the the supports even further with cardboard and hot glue from all 8 sides(2 side per support). After this, we cut the correct length and width for the front and sides of our robot. Then we secured everything with hot glue.
 
-![](/batterpack.jpeg)
-![](/supports3.jpeg)
-![](/measuring.jpeg)
-![](/bottombody.jpeg)
+![](/media/batterpack.jpeg)
+![](/media/supports3.jpeg)
+![](/media/measuring.jpeg)
+![](/media/bottombody.jpeg)
 
 
 **Goals to Work on Next**:
