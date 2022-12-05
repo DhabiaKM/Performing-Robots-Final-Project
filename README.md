@@ -129,7 +129,7 @@ For today, we finished and added quite a few things to the robot:
 ## Final Robot Version <a name="Final"></a>
 
 
-## Final Robot Performance <a name="Performace"></a>
+## Final Robot Performance <a name="Performance"></a>
 
 ## Reflection <a name="FinalReflection"></a>
 
