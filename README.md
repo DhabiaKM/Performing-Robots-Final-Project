@@ -7,7 +7,7 @@ This documentation is for the Anger performing robot. This robot plays the part 
 ## Table of contents
 1. [Progress Reports](#ProgressReports)
 2. [Final Product](#Final)
-3. [Performace Documents](#Performace)
+3. [Performance Documents](#Performace)
 4. [Thoughts and Reflection](#FinalReflection)
 
 
@@ -34,7 +34,7 @@ These progress reports are added as progress on the robot is being made. The goa
 We started by building the base. We cut a piece of wood at the scene shop and sanded it down to make smooth edges. Before adding the motors, we also created openings for the wheels to fit in.
 
 ![](/media/platform1.png)
-The next step was to assemble the platform! Aaaand TADA
+The next step was to assemble the platform! Aaaand TADA!!
 
 ![](/media/platform2.png)
 
@@ -42,7 +42,7 @@ The next step was to assemble the platform! Aaaand TADA
 
 **21st of Nov 2022**
 
-We started building our robot! We found L shaped cardboard pieces around the lab and sawed them to a unifrom size. These pieces will form our robot's skeleton. Then using supports between each L shaped corner piece, we glued them onto the platform! 
+We started building our robot! We found L shaped cardboard pieces around the lab and sawed them to a uniform size. These pieces will form our robot's skeleton. Then using supports between each L shaped corner piece, we glued them onto the platform! 
 
 ![](/media/skeleton1.png)
 
@@ -96,7 +96,7 @@ For today, we finished and added quite a few things to the robot:
 - The Head.
 - The Arms --> With supports inside the fist and arm parts
 - Supports to the base.
-- Shelf.
+- Shelf for the neo-pixel and the servos + any other mechanics we might need to be on top. This is also where the receiver(Ardiuno/NRF/MusicMaker) will rest.
 - A door for the back of the robot.
 
 ![](/media/angerbody1.jpeg)
