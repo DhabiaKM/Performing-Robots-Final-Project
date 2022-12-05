@@ -117,12 +117,14 @@ For today, we finished and added quite a few things to the robot:
 ### Progress Report 8 <a name="report8"></a>
 **4th of December 2022**
 - Added the supports to the arm
-- Coded the neo-pixel eyes --> Two modes: Neutral and Angry
+- Coded the neo-pixel eyes --> Two modes: Neutral and Angry. We are planning out neo-pixel code on this sheets page: https://docs.google.com/spreadsheets/d/10OB007oPhmtwvMAsuiGu0uw0XFK7GSwNcNFxZTwNpLo/edit#gid=0
 
 ### Progress Report 9 <a name="report9"></a>
 
 **5th of December 2022**
-- Worked on the radio transmitter/receiver scripts
+- Worked on the radio transmitter/receiver scripts for the most part
+  - Right now we are using buttons, but hopefully will transition to the switches soon
+- We also went to the costume shop to find clothing for the robot
 
 ## Final Robot Version <a name="Final"></a>
 
