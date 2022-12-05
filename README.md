@@ -20,6 +20,10 @@ These progress reports are added as progress on the robot is being made. The goa
 4. [Progress Report 4](#report4)
 5. [Progress Report 5](#report5)
 6. [Progress Report 6](#report6)
+7. [Progress Report 7](#report7)
+8. [Progress Report 8](#report8)
+9. [Progress Report 9](#report9)
+
 
 
 
@@ -90,12 +94,35 @@ Big progress made today! We drilled holes to place the battery with zip-ties on 
 
 For today, we finished and added quite a few things to the robot: 
 - The Head.
-- The Arms.
+- The Arms --> With supports inside the fist and arm parts
 - Supports to the base.
 - Shelf.
 - A door for the back of the robot.
 
+![](/media/angerbody1.jpeg)
+![](/media/angerbody2.jpeg)
+![](/media/arm1.jpeg)
+![](/media/arm2.jpeg)
+![](/media/head2.jpeg)
+![](/media/velcro1.jpeg)
+![](/media/supportsplatform.jpeg)
 
+### Progress Report 7 <a name="report7"></a>
+
+**3rd of December 2022**
+- Painted the arms and the head
+- Attached the arms to the sides, but they seem a bit wobbly because they are heavy so they need more supports added.
+- Coded the servos and made some arm movement
+
+### Progress Report 8 <a name="report8"></a>
+**4th of December 2022**
+- Added the supports to the arm
+- Coded the neo-pixel eyes --> Two modes: Neutral and Angry
+
+### Progress Report 9 <a name="report9"></a>
+
+**5th of December 2022**
+- Worked on the radio transmitter/receiver scripts
 
 ## Final Robot Version <a name="Final"></a>
 
