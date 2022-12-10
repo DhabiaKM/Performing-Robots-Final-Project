@@ -18,7 +18,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#include <printf.h>  // for debugging
+// #include <printf.h>  // for debugging
 
 //=======================================================================================
 //=======================================================================================
@@ -64,8 +64,9 @@ const int SERVO1PIN = A2;
 #define BRIGHTNESS 30
 
 // define eyes and mouth
-Adafruit_NeoPixel eyeLeft(64, NEOLEFT, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel eyeRight(64, NEORIGHT, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel eyeLeft(64, NEOLEFT, NEO_GRB + NEO_KHZ800);
+
 
 
 // using individual pixels to save space
@@ -92,7 +93,6 @@ const int ARMNEUTRALRIGHT = 20;
 
 void setup() {
   Serial.begin(9600);
-  printf_begin();
   // setupMusicMakerShield();
   setupServoMotors();
   setupLights();
@@ -124,8 +124,8 @@ void setupRF24() {
   // Set us as a receiver
   radio.openWritingPipe(rcvrAddress);
   radio.openReadingPipe(1, xmtrAddress);
-  radio.printPrettyDetails();
-  Serial.println("I am a receiver");
+  // radio.printPrettyDetails();
+  // Serial.println("I am a receiver");
 }
 
 // Music Maker
@@ -161,23 +161,26 @@ void setupServoMotors() {
   delay(10);
   armRight.write(ARMNEUTRALRIGHT);
   delay(10);
-  Serial.println("Arms set up.");
+  // Serial.println("Arms set up.");
 }
 
 void setupNeoPixel(Adafruit_NeoPixel &pixel){
   // Serial.print("Setting up pixel"); Serial.println(String(pixel);  
   pixel.begin();
   pixel.setBrightness(BRIGHTNESS);
+  pixel.clear();
+  pixel.show();
 }
 
 void setupLights() {
-  Serial.println("Setting up lights...");
-  setupNeoPixel(eyeLeft);
   setupNeoPixel(eyeRight);
+  // Serial.println("Setting up lights...");
+  setupNeoPixel(eyeLeft);
+  
   // setupNeoPixel(mouthLED);
   displayEyes(expressVal);
   // need code for mouth
-  Serial.println("Lights set up.");
+  // Serial.println("Lights set up.");
 }
 
 //====================================================================
@@ -186,21 +189,22 @@ void setupLights() {
 // Display expression. Default val = 0, Angry = 1.
 void displayEyes(int expression){
   // if 0, display normal
-  if(expression == 0){
-    Serial.println("Normal");
+  if(!expression){
+    // Serial.println("Normal");
     eyeNormalLeft(eyeLeft);
     eyeNormalRight(eyeRight);
   }
   // else display angry
   else{
-    Serial.print("Angry");
+    // Serial.print("Angry");
     eyeAngryLeft(eyeLeft);
     eyeAngryRight(eyeRight);
   }
 }
 // Angry Expression
 // Left Eye
-void eyeAngryLeft(Adafruit_NeoPixel pixel){
+void eyeAngryLeft(Adafruit_NeoPixel &pixel){
+  pixel.clear();
   for(int i : LeftEyeAngry) { // For each pixel...
     // Serial.print("left: turning on ");Serial.println(i);
     pixel.setPixelColor(i, pixel.Color(255, 0, 0));
@@ -208,7 +212,8 @@ void eyeAngryLeft(Adafruit_NeoPixel pixel){
   pixel.show(); 
 }
 // Right Eye
-void eyeAngryRight(Adafruit_NeoPixel pixel){
+void eyeAngryRight(Adafruit_NeoPixel &pixel){
+  pixel.clear();
   for(int i : RightEyeAngry) { // For each pixel...
     // Serial.print("right: turning on "); Serial.println(i);
     pixel.setPixelColor(i, pixel.Color(255, 0, 0));
@@ -217,7 +222,8 @@ void eyeAngryRight(Adafruit_NeoPixel pixel){
 }
 // Normal Expression
 // Left Eye
-void eyeNormalLeft(Adafruit_NeoPixel pixel){ 
+void eyeNormalLeft(Adafruit_NeoPixel &pixel){ 
+  pixel.clear();
   for(int i : LeftEyeNormal) { // For each pixel...
     // Serial.print("left: turning on ");Serial.println(i);
     pixel.setPixelColor(i, pixel.Color(255, 255, 255));
@@ -225,7 +231,8 @@ void eyeNormalLeft(Adafruit_NeoPixel pixel){
   pixel.show();
 }
 // Right Eye
-void eyeNormalRight(Adafruit_NeoPixel pixel){
+void eyeNormalRight(Adafruit_NeoPixel &pixel){
+  pixel.clear();
   for(int i : RightEyeNormal) { // For each pixel...
       // Serial.print("right: turning on ");Serial.println(i);
       pixel.setPixelColor(i, pixel.Color(255, 255, 255));
@@ -275,11 +282,9 @@ void loop() {
   if (radio.available(&pipeNum)) {
     radio.read(&data, sizeof(data));
     // Serial.print("message received Data = ");
-    // Serial.println(data.selectorBits);
-
+    Serial.println(data.selectorBits);
     switch (data.selectorBits) {
       case 0b00000000:
-        
         break;
       case 0b00000001:
         Serial.println("Moving Left Arm");
@@ -298,11 +303,9 @@ void loop() {
           delay(5);
           buttonPressed = true;
         }
-        
-        
         break;
       case 0b00000010:
-        Serial.println("Moving Right Arm");
+        // Serial.println("Moving Right Arm");
         // Don't play if it's already playing
         // if (musicPlayer.stopped()) {
         //   // Non-blocking
@@ -319,12 +322,28 @@ void loop() {
           delay(5);
           buttonPressed = true;
         }
-        
-        
         break;
       case 0b00000011:
-        expressVal = (expressVal + 1)%2;
-        Serial.println("Changing Expression" + String(expressVal));
+        expressVal += 1;
+        if(expressVal%2){
+          expressVal = 1;
+          // for(int i : LeftEyeAngry) { // For each pixel...
+          //     // Serial.print("left: turning on ");Serial.println(i);
+          //     eyeLeft.setPixelColor(i, eyeLeft.Color(255, 0, 0));
+          //   }
+          //   eyeLeft.show(); 
+          //   for(int i : RightEyeAngry) { // For each pixel...
+          //     // Serial.print("right: turning on "); Serial.println(i);
+          //     eyeRight.setPixelColor(i, eyeRight.Color(255, 0, 0));
+          //   }
+          //   eyeRight.show();
+        }
+        else{
+          expressVal = 0;
+          // eyeNormalLeft(eyeLeft);
+          // eyeNormalRight(eyeRight);
+        }
+        // Serial.println("Changing Expression: " + String(expressVal));
         displayEyes(expressVal);
         break;
       case 0b00000100:
@@ -360,36 +379,36 @@ void loop() {
     // left arm 150
     // right arm 10
 
-    if(currentMillis - armDownMillis >= 100){
-      // if(!buttonPressed){
-        if(armRight.read() == armAngleRight){
-            armRightMoving = false;
-        }
-        if(armLeft.read() == armAngleLeft){
-              armLeftMoving = false;
-        }
-      // }
-      // move arms down if not actively moving up
-      if(!armLeftMoving && (armAngleLeft < (ARMNEUTRALLEFT)) ){
-        // armLeft.write(ARMNEUTRALLEFT);
-        // armAngleLeft = ARMNEUTRALLEFT;
-        armAngleLeft += 5;
-        armLeft.write(armAngleLeft);
-        // for(armAngleLeft; armAngleLeft < ARMNEUTRALLEFT; armAngleLeft+=5){
-        //   armLeft.write(armAngleLeft);
-        //   delay(5);
-        // }
-      }
-      if(!armRightMoving && (armAngleRight > (ARMNEUTRALRIGHT)) ){
-        // armRight.write(ARMNEUTRALRIGHT);
-        // armAngleRight = ARMNEUTRALRIGHT;
-        armAngleRight -= 5;
-        armRight.write(armAngleRight);
-      }
-      buttonPressed = false;
+    // if(currentMillis - armDownMillis >= 100){
+    //   // if(!buttonPressed){
+    //     if(armRight.read() == armAngleRight){
+    //         armRightMoving = false;
+    //     }
+    //     if(armLeft.read() == armAngleLeft){
+    //           armLeftMoving = false;
+    //     }
+    //   // }
+    //   // move arms down if not actively moving up
+    //   if(!armLeftMoving && (armAngleLeft < (ARMNEUTRALLEFT)) ){
+    //     // armLeft.write(ARMNEUTRALLEFT);
+    //     // armAngleLeft = ARMNEUTRALLEFT;
+    //     armAngleLeft += 5;
+    //     armLeft.write(armAngleLeft);
+    //     // for(armAngleLeft; armAngleLeft < ARMNEUTRALLEFT; armAngleLeft+=5){
+    //     //   armLeft.write(armAngleLeft);
+    //     //   delay(5);
+    //     // }
+    //   }
+    //   if(!armRightMoving && (armAngleRight > (ARMNEUTRALRIGHT)) ){
+    //     // armRight.write(ARMNEUTRALRIGHT);
+    //     // armAngleRight = ARMNEUTRALRIGHT;
+    //     armAngleRight -= 5;
+    //     armRight.write(armAngleRight);
+    //   }
+    //   buttonPressed = false;
 
-      armDownMillis = currentMillis;
-    }
+    //   armDownMillis = currentMillis;
+    // }
     // check if arms are moving
       
 
