@@ -12,8 +12,6 @@
 #include <Servo.h>
 // For Facial Expressions
 #include <Adafruit_NeoPixel.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_NeoMatrix.h>
 
 #include <string.h>
 
@@ -29,16 +27,6 @@
 const int CEPIN = 9;
 const int CSNPIN = 10;
 RF24 radio(CEPIN, CSNPIN);  // CE, CSN
-
-// In summary,
-// nRF 24L01 pin    Arduino pin   name
-//          1                     GND
-//          2                     3.3V
-//          3             9       CE
-//          4             10      CSN
-//          5             13      SCLK
-//          6             11      MOSI/COPI
-//          7             12      MISO/CIPO
 
 // Channel and address allocation:
 const byte addr = 0x33; // change as per the above assignment
@@ -70,22 +58,24 @@ const int SERVO1PIN = A2;
 
 // Neopixels
 #define FACTORYRESET_ENABLE     1
-#define NEOLEFT A4
-#define NEORIGHT A3
+#define NEOLEFT A3
+#define NEORIGHT A4
 #define NEOPIXELPIN3 A5
 #define BRIGHTNESS 30
 
-
 // define eyes and mouth
-Adafruit_NeoMatrix eyeLeft = Adafruit_NeoMatrix(8, 8, NEOLEFT,  NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
-  NEO_MATRIX_COLUMNS,
-  NEO_GRB            + NEO_KHZ800);
-Adafruit_NeoMatrix eyeRight = Adafruit_NeoMatrix(8, 8, NEORIGHT,  NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
-  NEO_MATRIX_COLUMNS,
-  NEO_GRB            + NEO_KHZ800);
-Adafruit_NeoMatrix mouthLED = Adafruit_NeoMatrix(8, 8, NEOPIXELPIN3,  NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
-  NEO_MATRIX_COLUMNS,
-  NEO_GRB            + NEO_KHZ800);
+Adafruit_NeoPixel eyeLeft(64, NEOLEFT, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel eyeRight(64, NEORIGHT, NEO_GRB + NEO_KHZ800);
+
+
+// using individual pixels to save space
+// normal eye expressions
+uint8_t LeftEyeNormal[]={8,9,10,11,12,13,14,15,16,23,24,31,32,39,41,46,50,51,52,53};
+uint8_t RightEyeNormal[]={8,9,10,11,12,13,14,15,16,23,24,31,32,39,41,46,50,51,52,53};
+// angry eye expressions
+uint8_t LeftEyeAngry[]={7,14,15,21,22,23,28,29,30,31,35,36,37,38,39,42,43,44,45,46,47,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63};
+uint8_t RightEyeAngry[]={0,8,9,16,17,18,24,25,26,27,32,33,34,35,36,40,41,42,43,44,45,48,49,50,51,52,53,54,56,57,58,59,60,61,62,63};
+
 // define expression var. 0 - default, 1 - angry
 int expressVal = 0;
 
@@ -94,22 +84,21 @@ Servo armLeft;
 Servo armRight;
 
 // change as per your robot
-const int ARMLEFTNEUTRAL = 150;
-const int ARMRIGHTNEUTRAL = 20;
+const int ARMNEUTRALLEFT = 150;
+const int ARMNEUTRALRIGHT = 20;
 
 //=======================================================================================
 // Setup Functions
 
 void setup() {
   Serial.begin(9600);
-  Serial.print("got all the way here");
   printf_begin();
-  Serial.print("got all the way here");
   // setupMusicMakerShield();
   setupServoMotors();
   setupLights();
   setupRF24();
   // Set up all the attached hardware
+  // eyeRight.clear();
   
   
 }
@@ -168,26 +157,24 @@ void setupServoMotors() {
   armLeft.attach(SERVO0PIN);
   armRight.attach(SERVO1PIN);
   // Serial.println("Arms attached.");
-  armLeft.write(ARMLEFTNEUTRAL);
+  armLeft.write(ARMNEUTRALLEFT);
   delay(10);
-  armRight.write(ARMRIGHTNEUTRAL);
+  armRight.write(ARMNEUTRALRIGHT);
   delay(10);
   Serial.println("Arms set up.");
 }
 
-void setupNeoMatrix(Adafruit_NeoMatrix &matrix){
-  // Serial.print("Setting up matrix"); Serial.println(String(matrix);  
-  matrix.begin();
-  matrix.setBrightness(BRIGHTNESS);
-  matrix.fillScreen(0);
-  matrix.show(); 
+void setupNeoPixel(Adafruit_NeoPixel &pixel){
+  // Serial.print("Setting up pixel"); Serial.println(String(pixel);  
+  pixel.begin();
+  pixel.setBrightness(BRIGHTNESS);
 }
 
 void setupLights() {
   Serial.println("Setting up lights...");
-  setupNeoMatrix(eyeLeft);
-  setupNeoMatrix(eyeRight);
-  setupNeoMatrix(mouthLED);
+  setupNeoPixel(eyeLeft);
+  setupNeoPixel(eyeRight);
+  // setupNeoPixel(mouthLED);
   displayEyes(expressVal);
   // need code for mouth
   Serial.println("Lights set up.");
@@ -196,71 +183,81 @@ void setupLights() {
 //====================================================================
 // Other Functions
 
-// Display expression. Default val = 0, Angry = 1. (val + 1)%2 on button.
+// Display expression. Default val = 0, Angry = 1.
 void displayEyes(int expression){
   // if 0, display normal
   if(expression == 0){
     Serial.println("Normal");
-    leftEyeNormal(eyeLeft, eyeLeft.Color(255,255,255));
-    rightEyeNormal(eyeRight, eyeRight.Color(255,255,255));
+    eyeNormalLeft(eyeLeft);
+    eyeNormalRight(eyeRight);
   }
   // else display angry
   else{
     Serial.print("Angry");
-    leftEyeAngry(eyeLeft, eyeLeft.Color(255,0,0) );
-    rightEyeAngry(eyeRight, eyeRight.Color(255,0,0) );
+    eyeAngryLeft(eyeLeft);
+    eyeAngryRight(eyeRight);
+  }
+}
+// Angry Expression
+// Left Eye
+void eyeAngryLeft(Adafruit_NeoPixel pixel){
+  for(int i : LeftEyeAngry) { // For each pixel...
+    // Serial.print("left: turning on ");Serial.println(i);
+    pixel.setPixelColor(i, pixel.Color(255, 0, 0));
+  }
+  pixel.show(); 
+}
+// Right Eye
+void eyeAngryRight(Adafruit_NeoPixel pixel){
+  for(int i : RightEyeAngry) { // For each pixel...
+    // Serial.print("right: turning on "); Serial.println(i);
+    pixel.setPixelColor(i, pixel.Color(255, 0, 0));
+  }
+  pixel.show();
+}
+// Normal Expression
+// Left Eye
+void eyeNormalLeft(Adafruit_NeoPixel pixel){ 
+  for(int i : LeftEyeNormal) { // For each pixel...
+    // Serial.print("left: turning on ");Serial.println(i);
+    pixel.setPixelColor(i, pixel.Color(255, 255, 255));
+  }
+  pixel.show();
+}
+// Right Eye
+void eyeNormalRight(Adafruit_NeoPixel pixel){
+  for(int i : RightEyeNormal) { // For each pixel...
+      // Serial.print("right: turning on ");Serial.println(i);
+      pixel.setPixelColor(i, pixel.Color(255, 255, 255));
+    pixel.show();
   }
 }
 
-// Left Eye
-void leftEyeAngry(Adafruit_NeoMatrix &matrix, uint32_t c){
-  matrix.fillScreen(0);
-  matrix.drawLine(1,0,4,0,c); 
-  matrix.drawLine(5,1,6,2,c); 
-  matrix.drawLine(6,3,6,5,c); 
-  matrix.drawLine(0,0,6,6,c);
-  matrix.show();
+// Macros
+void armsUp(int angleLeft, int angleRight, Servo armLeft, Servo armRight){
+  armLeft.write(angleLeft);
+  armRight.write(angleRight);
 }
-void leftEyeNormal(Adafruit_NeoMatrix &matrix, uint32_t c){ 
-  matrix.fillScreen(0);
-  matrix.drawLine(1,0,1,7,c); 
-  matrix.drawLine(2,0,4,0,c); 
-  matrix.drawLine(5,1,6,2,c); 
-  matrix.drawLine(6,3,6,5,c); 
-  matrix.drawLine(2,7,4,7,c);
-  matrix.drawPixel(5, 6, c);
-  matrix.show();
+// reset angle of arms
+void resetArms(int armAngleLeft, int armAngleRight){
+  for(armAngleLeft; armAngleLeft <= ARMNEUTRALLEFT; armAngleLeft+=5){
+    armLeft.write(armAngleLeft);
+    delay(5);
+  }
+  for(armAngleRight; armAngleRight >= ARMNEUTRALRIGHT; armAngleLeft+=5){
+    armLeft.write(armAngleLeft);
+    delay(5);
+  }
 }
-
-// Right Eye
-void rightEyeAngry(Adafruit_NeoMatrix &matrix, uint32_t c){
-  matrix.fillScreen(0);
-  matrix.drawLine(6,1,0,7,c); 
-  matrix.drawLine(6,2,6,5,c); 
-  matrix.drawLine(1,7,4,7,c);
-  matrix.drawPixel(5, 6, c);
-  matrix.show();
-}
-void rightEyeNormal(Adafruit_NeoMatrix &matrix, uint32_t c){
-  matrix.fillScreen(0);
-  matrix.drawLine(1,0,1,7,c); 
-  matrix.drawLine(2,0,4,0,c); 
-  matrix.drawLine(5,1,6,2,c); 
-  matrix.drawLine(6,3,6,5,c); 
-  matrix.drawLine(2,7,4,7,c);
-  matrix.drawPixel(5, 6, c);
-  matrix.show();
-}
-
 
 
 
 //=======================================================================================
 // Main
-// const int ARMLEFTNEUTRAL = 150;
-// const int ARMRIGHTNEUTRAL = 60;
-int armLeftAngle = ARMLEFTNEUTRAL;
-int armRightAngle = ARMRIGHTNEUTRAL;
+// const int ARMNEUTRALLEFT = 150;
+// const int ARMNEUTRALRIGHT = 60;
+int armAngleLeft = ARMNEUTRALLEFT;
+int armAngleRight = ARMNEUTRALRIGHT;
 
 bool armLeftMoving = false;
 bool armRightMoving = false;
@@ -273,14 +270,13 @@ bool buttonPressed = false;
 
 void loop() {
   unsigned long currentMillis = millis();
-  // If there is data, read it,
-  // and do the needfull
-  // Become a receiver
   radio.startListening();
+  // displayEyes(expressVal);
   if (radio.available(&pipeNum)) {
     radio.read(&data, sizeof(data));
     // Serial.print("message received Data = ");
     // Serial.println(data.selectorBits);
+
     switch (data.selectorBits) {
       case 0b00000000:
         
@@ -297,8 +293,8 @@ void loop() {
         // }
         if(!armLeftMoving){
           armLeftMoving = true;
-          armLeftAngle -= 50;
-          armLeft.write(armLeftAngle);     
+          armAngleLeft -= 50;
+          armLeft.write(armAngleLeft);     
           delay(5);
           buttonPressed = true;
         }
@@ -318,8 +314,8 @@ void loop() {
 
         if(!armRightMoving){
           armRightMoving = true;
-          armRightAngle += 50;
-          armRight.write(armRightAngle);
+          armAngleRight += 50;
+          armRight.write(armAngleRight);
           delay(5);
           buttonPressed = true;
         }
@@ -366,29 +362,29 @@ void loop() {
 
     if(currentMillis - armDownMillis >= 100){
       // if(!buttonPressed){
-        if(armRight.read() == armRightAngle){
+        if(armRight.read() == armAngleRight){
             armRightMoving = false;
         }
-        if(armLeft.read() == armLeftAngle){
+        if(armLeft.read() == armAngleLeft){
               armLeftMoving = false;
         }
       // }
       // move arms down if not actively moving up
-      if(!armLeftMoving && (armLeftAngle < (ARMLEFTNEUTRAL)) ){
-        // armLeft.write(ARMLEFTNEUTRAL);
-        // armLeftAngle = ARMLEFTNEUTRAL;
-        armLeftAngle += 5;
-        armLeft.write(armLeftAngle);
-        // for(armLeftAngle; armLeftAngle < ARMLEFTNEUTRAL; armLeftAngle+=5){
-        //   armLeft.write(armLeftAngle);
+      if(!armLeftMoving && (armAngleLeft < (ARMNEUTRALLEFT)) ){
+        // armLeft.write(ARMNEUTRALLEFT);
+        // armAngleLeft = ARMNEUTRALLEFT;
+        armAngleLeft += 5;
+        armLeft.write(armAngleLeft);
+        // for(armAngleLeft; armAngleLeft < ARMNEUTRALLEFT; armAngleLeft+=5){
+        //   armLeft.write(armAngleLeft);
         //   delay(5);
         // }
       }
-      if(!armRightMoving && (armRightAngle > (ARMRIGHTNEUTRAL)) ){
-        // armRight.write(ARMRIGHTNEUTRAL);
-        // armRightAngle = ARMRIGHTNEUTRAL;
-        armRightAngle -= 5;
-        armRight.write(armRightAngle);
+      if(!armRightMoving && (armAngleRight > (ARMNEUTRALRIGHT)) ){
+        // armRight.write(ARMNEUTRALRIGHT);
+        // armAngleRight = ARMNEUTRALRIGHT;
+        armAngleRight -= 5;
+        armRight.write(armAngleRight);
       }
       buttonPressed = false;
 
@@ -399,23 +395,21 @@ void loop() {
 
     
     // equalizer - in case numbers go out of range
-    if(armRightAngle < ARMRIGHTNEUTRAL){
-      armRightAngle = ARMRIGHTNEUTRAL;
+    if(armAngleRight < ARMNEUTRALRIGHT){
+      armAngleRight = ARMNEUTRALRIGHT;
     }
-    else if (armRightAngle > 180){
-      armRightAngle = 180;
+    else if (armAngleRight > 180){
+      armAngleRight = 180;
     }
-    if(armLeftAngle < 0){
-      armLeftAngle = 0;
+    if(armAngleLeft < 0){
+      armAngleLeft = 0;
     }
-    else if (armLeftAngle > ARMLEFTNEUTRAL){
-      armLeftAngle = ARMLEFTNEUTRAL;
+    else if (armAngleLeft > ARMNEUTRALLEFT){
+      armAngleLeft = ARMNEUTRALLEFT;
     }
-
-    
   
     // debugging
-    Serial.print("armLeftAngle: "); Serial.print(armLeftAngle);Serial.print("  armRightAngle: "); Serial.println(armRightAngle);
+    // Serial.print("armAngleLeft: "); Serial.print(armAngleLeft);Serial.print("  armAngleRight: "); Serial.println(armAngleRight);
   }
   // displayEyes(expressVal);
 

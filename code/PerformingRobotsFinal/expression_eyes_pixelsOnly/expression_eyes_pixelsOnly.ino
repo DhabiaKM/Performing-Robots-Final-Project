@@ -32,8 +32,8 @@ void setup(void)
 
 void loop()
 {
-  angryRightEye(); 
-  angryLeftEye();
+  normalLeftEye(); 
+  normalRightEye();
     
 
 
@@ -60,9 +60,9 @@ void normalRightEye(){
 }
 
 void angryRightEye(){ 
-    for(int i : RightEyeAngry) { // For each pixel...
-    Serial.print("right: turning on ");Serial.println(i);
-    rightEye.setPixelColor(i, rightEye.Color(255, 0, 0));
+  for(int i : RightEyeAngry) { // For each pixel...
+  Serial.print("right: turning on ");Serial.println(i);
+  rightEye.setPixelColor(i, rightEye.Color(255, 0, 0));
   }
   rightEye.show();   
 }
