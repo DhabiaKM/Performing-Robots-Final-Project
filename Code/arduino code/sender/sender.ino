@@ -55,8 +55,8 @@ RF24 radio(CEPIN, CSNPIN);  // CE, CSN
 // Yoki and Yupu:  Channel 70, addr = 0xC3
 // Omar and Mudi: Channel 80, addr = 0xCC
 // Dhabia and Joseph: Channel 90, addr = 0x33
-const byte addr = 0x76;             // change as per the above assignment
-const int RF24_CHANNEL_NUMBER = 0;  // change as per the above assignment
+const byte addr = 0x33;             // change as per the above assignment
+const int RF24_CHANNEL_NUMBER = 90;  // change as per the above assignment
 
 // Do not make changes here
 const byte xmtrAddress[] = { addr, addr, 0xC7, 0xE6, 0xCC };
@@ -71,9 +71,12 @@ unsigned int totalTransmitFailures = 0;
 struct DataStruct {
   uint8_t servoBits;
   uint8_t neoPixelBits;
-  uint8_t playbackControlBits;
+  uint8_t armBits;
 };
 DataStruct data;
+DataStruct currentData; 
+DataStruct prevData; 
+
 
 void setupRF24Common() {
 
@@ -129,6 +132,7 @@ const int NEOSELPIN0 = A0;
 const int NEOXMITPIN = 6;
 // Hypothetical audio control switches
 const int PLAYNEXTCLIPPIN = A3;
+const int PLAYPREVCLIPIN=A4;
 // that leaves 6, 7, 8, A4, and A5 unused
 void setup() {
   Serial.begin(9600);
@@ -154,15 +158,20 @@ void setupRF24() {
   Serial.println(F("I am a transmitter"));
 }
 void loop() {
+
   // If the transmit button is pressed, read the switches
   // and send the bits
+  
   if (digitalRead(SERVOXMITPIN) == LOW) {  // remember switches are active LOW
     clearData();
     data.servoBits = (digitalRead(SERVOSELPIN0) << 0
                       | digitalRead(SERVOSELPIN1) << 1
                       | digitalRead(SERVOSELPIN2) << 2);
     radio.stopListening();
-    rf24SendData();
+    // if(data.servoBits!=prevData.servoBits){ 
+      prevData=data; 
+      rf24SendData();
+    // }
     delay(100);  // if the button is still pressed don't do this too often
   }
   if (digitalRead(NEOXMITPIN) == LOW) {  // remember switches are active LOW
@@ -171,7 +180,11 @@ void loop() {
                          | digitalRead(NEOSELPIN1) << 1
                          | digitalRead(NEOSELPIN2) << 2);
     radio.stopListening();
+    if(data.neoPixelBits!=prevData.neoPixelBits){ 
+      prevData=data; 
+
     rf24SendData();
+    }
     delay(100);  // if the button is still pressed don't do this too often
   }
   if (digitalRead(PLAYNEXTCLIPPIN) == LOW) {
