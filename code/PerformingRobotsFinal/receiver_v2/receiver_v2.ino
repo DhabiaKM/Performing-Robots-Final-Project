@@ -5,9 +5,6 @@
 //=======================================================================================
 // Libraries
 
-// For MusicMaker
-#include <Adafruit_VS1053.h>
-#include <SD.h>
 // For Servos
 #include <Servo.h>
 // For Facial Expressions
@@ -38,10 +35,6 @@ const int RF24_POWER_LEVEL = RF24_PA_LOW;
 // Pipe Variables
 uint8_t pipeNum;
 unsigned int totalTransmitFailures = 0;
-struct DataStruct {
-  uint8_t selectorBits;
-};
-DataStruct data;
 
 // Additional pin usage for receiver
 // Adafruit music maker shield
@@ -50,8 +43,7 @@ DataStruct data;
 #define SHIELD_DCS 6     // VS1053 Data/command select pin (output)
 #define CARDCS 4         // Card chip select pin
 // DREQ should be an Int pin, see http://arduino.cc/en/Reference/attachInterrupt
-#define DREQ 3  // VS1053 Data request, ideally an Interrupt pin
-Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(SHIELD_RESET, SHIELD_CS, SHIELD_DCS, DREQ, CARDCS);
+#define DREQ 3  // VS1053 Data request, ideally an _RESET, SHIELD_CS, SHIELD_DCS, DREQ, CARDCS);
 // Servo motors
 const int SERVO0PIN = A1;
 const int SERVO1PIN = A2;
@@ -87,20 +79,25 @@ Servo armRight;
 // change as per your robot
 const int ARMNEUTRALLEFT = 150;
 const int ARMNEUTRALRIGHT = 20;
+const int ARMMAXLEFT = 0;
+const int ARMMAXRIGHT = 180;
+
+// structure for data
+struct DataStruct {
+  uint8_t servoBits;
+  uint8_t neoPixelBits;
+  uint8_t armBits;
+};
+DataStruct data;
 
 //=======================================================================================
 // Setup Functions
 
 void setup() {
   Serial.begin(9600);
-  // setupMusicMakerShield();
   setupServoMotors();
   setupLights();
-  setupRF24();
-  // Set up all the attached hardware
-  // eyeRight.clear();
-  
-  
+  setupRF24();  
 }
 
 void setupRF24Common() {
@@ -128,31 +125,7 @@ void setupRF24() {
   // Serial.println("I am a receiver");
 }
 
-// Music Maker
-void setupMusicMakerShield() {
-  if (!musicPlayer.begin()) {  // initialise the music player
-    Serial.println(F("Couldn't find VS1053, do you have the right pins defined?"));
-    while (1)
-      ;
-  }
-  Serial.println(F("VS1053 found"));
-  if (!SD.begin(CARDCS)) {
-    Serial.println(F("SD card failed or not present"));
-    while (1)
-      ;  // don't do anything more
-  }
-
-  // Set volume for left, right channels. lower numbers == louder volume!
-  musicPlayer.setVolume(20, 20);
-
-  // Timer interrupts are not suggested, better to use DREQ interrupt!
-  //musicPlayer.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT); // timer int
-
-  // If DREQ is on an interrupt pin (on uno, #2 or #3) we can do background
-  // audio playing
-  musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);  // DREQ int
-}
-
+// Servos
 void setupServoMotors() {
   armLeft.attach(SERVO0PIN);
   armRight.attach(SERVO1PIN);
@@ -176,7 +149,6 @@ void setupLights() {
   setupNeoPixel(eyeRight);
   // Serial.println("Setting up lights...");
   setupNeoPixel(eyeLeft);
-  
   // setupNeoPixel(mouthLED);
   displayEyes(expressVal);
   // need code for mouth
@@ -186,6 +158,7 @@ void setupLights() {
 //====================================================================
 // Other Functions
 
+// EXPRESSIONS
 // Display expression. Default val = 0, Angry = 1.
 void displayEyes(int expression){
   // if 0, display normal
@@ -263,6 +236,8 @@ void resetArms(int armAngleLeft, int armAngleRight){
 // Main
 // const int ARMNEUTRALLEFT = 150;
 // const int ARMNEUTRALRIGHT = 60;
+// ARMMAXLEFT = 0;
+// ARMMAXRIGHT = 180;
 int armAngleLeft = ARMNEUTRALLEFT;
 int armAngleRight = ARMNEUTRALRIGHT;
 
@@ -273,6 +248,7 @@ unsigned long armUpMillis = 0;
 unsigned long armDownMillis = 0;
 
 bool buttonPressed = false;
+bool armsUnlocked = true;
 
 
 void loop() {
@@ -282,20 +258,47 @@ void loop() {
   if (radio.available(&pipeNum)) {
     radio.read(&data, sizeof(data));
     // Serial.print("message received Data = ");
-    Serial.println(data.selectorBits);
-    switch (data.selectorBits) {
+    // Serial.println(data.selectorBits);
+    switch (data.neoPixelBits) {
+      case 0b00000001:
+        displayEyes(0);
+        break;
+      case 0b00000011:
+        displayEyes(1);
+        break;
+      default:
+        break;
+    }
+    switch (data.servoBits) {
+      case 0b00000000:
+        // armsUnlocked = false;
+        break;
+      case 0b00000001:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armAngleLeft = ARMMAXLEFT;
+        break;
+      case 0b00000010:
+        armsUnlocked = false;
+        armRight.write(ARMMAXRIGHT);
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      case 0b00000011:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armRight.write(ARMMAXRIGHT);
+        armAngleLeft = ARMMAXLEFT;
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      default:
+        break;
+    }
+
+    switch (data.armBits) {
       case 0b00000000:
         break;
       case 0b00000001:
-        Serial.println("Moving Left Arm");
-        // Don't play if it's already playing
-        // if (musicPlayer.stopped()) {
-        //   // Non-blocking
-        //   Serial.println(F("Playing track 001"));
-        //   musicPlayer.startPlayingFile("/track001.mp3");
-        // } else {
-        //   Serial.println(F("Playing in progress, ignoring"));
-        // }
+        armsUnlocked = true;
         if(!armLeftMoving){
           armLeftMoving = true;
           armAngleLeft -= 50;
@@ -305,16 +308,7 @@ void loop() {
         }
         break;
       case 0b00000010:
-        // Serial.println("Moving Right Arm");
-        // Don't play if it's already playing
-        // if (musicPlayer.stopped()) {
-        //   // Non-blocking
-        //   Serial.println(F("Playing track 002"));
-        //   musicPlayer.startPlayingFile("/track002.mp3");
-        // } else {
-        //   Serial.println(F("Playing in progress, ignoring"));
-        // }
-
+        armsUnlocked = true;
         if(!armRightMoving){
           armRightMoving = true;
           armAngleRight += 50;
@@ -324,53 +318,31 @@ void loop() {
         }
         break;
       case 0b00000011:
-        expressVal += 1;
-        if(expressVal%2){
-          expressVal = 1;
-          // for(int i : LeftEyeAngry) { // For each pixel...
-          //     // Serial.print("left: turning on ");Serial.println(i);
-          //     eyeLeft.setPixelColor(i, eyeLeft.Color(255, 0, 0));
-          //   }
-          //   eyeLeft.show(); 
-          //   for(int i : RightEyeAngry) { // For each pixel...
-          //     // Serial.print("right: turning on "); Serial.println(i);
-          //     eyeRight.setPixelColor(i, eyeRight.Color(255, 0, 0));
-          //   }
-          //   eyeRight.show();
+        armsUnlocked = true;
+        if(!armLeftMoving){
+          armLeftMoving = true;
+          armAngleLeft -= 50;
+          armLeft.write(armAngleLeft);     
+          delay(5);
+          buttonPressed = true;
         }
-        else{
-          expressVal = 0;
-          // eyeNormalLeft(eyeLeft);
-          // eyeNormalRight(eyeRight);
+        if(!armRightMoving){
+          armRightMoving = true;
+          armAngleRight += 50;
+          armRight.write(armAngleRight);
+          delay(5);
+          buttonPressed = true;
         }
-        // Serial.println("Changing Expression: " + String(expressVal));
-        displayEyes(expressVal);
+        // expressVal += 1;
+        // if(expressVal%2){
+        //   expressVal = 1;
+        // }
+        // else{
+        //   expressVal = 0;
+        // }
+        // displayEyes(expressVal);
         break;
       case 0b00000100:
-        break;
-      case 0b00000101:
-        break;
-      case 0b00000110:
-        break;
-      case 0b00000111:
-        break;
-      case 0b00001000:
-        break;
-      case 0b00001001:
-        break;
-      case 0b00001010:
-        break;
-      case 0b00001011:
-        break;
-      case 0b00001100:
-        break;
-      case 0b00001101:
-        break;
-      case 0b00001110:
-        break;
-      case 0b00001111:
-        break;
-      default:
         break;
     }
   }
@@ -379,40 +351,38 @@ void loop() {
     // left arm 150
     // right arm 10
 
-    // if(currentMillis - armDownMillis >= 100){
-    //   // if(!buttonPressed){
-    //     if(armRight.read() == armAngleRight){
-    //         armRightMoving = false;
-    //     }
-    //     if(armLeft.read() == armAngleLeft){
-    //           armLeftMoving = false;
-    //     }
-    //   // }
-    //   // move arms down if not actively moving up
-    //   if(!armLeftMoving && (armAngleLeft < (ARMNEUTRALLEFT)) ){
-    //     // armLeft.write(ARMNEUTRALLEFT);
-    //     // armAngleLeft = ARMNEUTRALLEFT;
-    //     armAngleLeft += 5;
-    //     armLeft.write(armAngleLeft);
-    //     // for(armAngleLeft; armAngleLeft < ARMNEUTRALLEFT; armAngleLeft+=5){
-    //     //   armLeft.write(armAngleLeft);
-    //     //   delay(5);
-    //     // }
-    //   }
-    //   if(!armRightMoving && (armAngleRight > (ARMNEUTRALRIGHT)) ){
-    //     // armRight.write(ARMNEUTRALRIGHT);
-    //     // armAngleRight = ARMNEUTRALRIGHT;
-    //     armAngleRight -= 5;
-    //     armRight.write(armAngleRight);
-    //   }
-    //   buttonPressed = false;
+    if(armsUnlocked){
+      if(currentMillis - armDownMillis >= 100){
+        // move arms down if not actively moving up
+        if(!armLeftMoving && (armAngleLeft < (ARMNEUTRALLEFT)) ){
+          // armLeft.write(ARMNEUTRALLEFT);
+          // armAngleLeft = ARMNEUTRALLEFT;
+          armAngleLeft += 10;
+          armLeft.write(armAngleLeft);
+          // for(armAngleLeft; armAngleLeft < ARMNEUTRALLEFT; armAngleLeft+=5){
+          //   armLeft.write(armAngleLeft);
+          //   delay(5);
+          // }
+        }
+        if(!armRightMoving && (armAngleRight > (ARMNEUTRALRIGHT)) ){
+          // armRight.write(ARMNEUTRALRIGHT);
+          // armAngleRight = ARMNEUTRALRIGHT;
+          armAngleRight -= 10;
+          armRight.write(armAngleRight);
+        }
+        buttonPressed = false;
+        armDownMillis = currentMillis;
+      }
+    }
 
-    //   armDownMillis = currentMillis;
-    // }
     // check if arms are moving
-      
+    if(armRight.read() == armAngleRight){
+      armRightMoving = false;
+    }
+    if(armLeft.read() == armAngleLeft){
+      armLeftMoving = false;
+    }
 
-    
     // equalizer - in case numbers go out of range
     if(armAngleRight < ARMNEUTRALRIGHT){
       armAngleRight = ARMNEUTRALRIGHT;

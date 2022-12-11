@@ -63,8 +63,8 @@ void setup() {
   musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);  // DREQ int
   
   // Play one file, don't return until complete
-  Serial.println(F("Playing track 001"));
-  musicPlayer.playFullFile("/1.mp3");
+  // Serial.println(F("Playing track 001"));
+  // musicPlayer.playFullFile("/1.mp3");
   // Play another file in the background, REQUIRES interrupts!
   Serial.println(F("Playing track 002"));
   musicPlayer.startPlayingFile("/1.mp3");
