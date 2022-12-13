@@ -105,8 +105,8 @@ void rf24SendData() {
   Serial.print(data.servoBits, BIN);
   Serial.print(F(" NeoPixel bits = "));
   Serial.print(data.neoPixelBits, BIN);
-  Serial.print(F(" Playback control bits = "));
-  Serial.print(data.playbackControlBits, BIN);
+  Serial.print(F(" Arm Bits = "));
+  Serial.print(data.armBits, BIN);
 
   Serial.print(" ... ");
   if (retval) {
@@ -132,7 +132,7 @@ const int NEOSELPIN0 = A0;
 const int NEOXMITPIN = 6;
 // Hypothetical audio control switches
 const int PLAYNEXTCLIPPIN = A3;
-const int PLAYPREVCLIPIN=A4;
+const int PLAYPREVCLIPIN = A4;
 // that leaves 6, 7, 8, A4, and A5 unused
 void setup() {
   Serial.begin(9600);
@@ -147,6 +147,8 @@ void setup() {
   pinMode(NEOSELPIN0, INPUT_PULLUP);
   pinMode(NEOXMITPIN, INPUT_PULLUP);
   pinMode(PLAYNEXTCLIPPIN, INPUT_PULLUP);
+  pinMode(PLAYPREVCLIPIN, INPUT_PULLUP);
+
   setupRF24();
 }
 void setupRF24() {
@@ -180,28 +182,36 @@ void loop() {
                          | digitalRead(NEOSELPIN1) << 1
                          | digitalRead(NEOSELPIN2) << 2);
     radio.stopListening();
-    if(data.neoPixelBits!=prevData.neoPixelBits){ 
+    // if(data.neoPixelBits!=prevData.neoPixelBits){ 
       prevData=data; 
-
     rf24SendData();
-    }
+    // }
     delay(100);  // if the button is still pressed don't do this too often
   }
+
+  // arms
+  int rightUp = 0;
+  int leftUp = 0;
   if (digitalRead(PLAYNEXTCLIPPIN) == LOW) {
+    leftUp = 1;
+  }
+  if (digitalRead(PLAYPREVCLIPIN) == LOW){
+    rightUp = 2;
+  }
+  if(leftUp > 0 || rightUp > 0){
     clearData();
-    data.playbackControlBits = 1;
-    
+    data.armBits = leftUp + rightUp;
     radio.stopListening();
     rf24SendData();
     delay(100);  // if the button is still pressed don't do this too often
-  
   }
+
 }  // end of loop()
 void clearData() {
   // set all fields to 0
   data.servoBits = 0;
   data.neoPixelBits = 0;
-  data.playbackControlBits = 0;
+  data.armBits = 0;
 }
 // End of transmitter code
 
