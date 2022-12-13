@@ -274,46 +274,9 @@ void loop() {
     radio.read(&data, sizeof(data));
     // Serial.print("message received Data = ");
     // Serial.println(data.selectorBits);
-    switch (data.neoPixelBits) {
-      case 0b00000000:
-        fireDown(fireServo);
-      case 0b00000001:
-        displayEyes(0);
-        break;
-      case 0b00000011:
-        displayEyes(1);
-        break;
-      default:
-        break;
-    }
-    switch (data.servoBits) {
-      case 0b00000000:
-        // armsUnlocked = false;
-        break;
-      case 0b00000001:
-        armsUnlocked = false;
-        armLeft.write(ARMMAXLEFT);
-        armAngleLeft = ARMMAXLEFT;
-        break;
-      case 0b00000010:
-        armsUnlocked = false;
-        armRight.write(ARMMAXRIGHT);
-        armAngleRight = ARMMAXRIGHT;
-        break;
-      case 0b00000011:
-        armsUnlocked = false;
-        armLeft.write(ARMMAXLEFT);
-        armRight.write(ARMMAXRIGHT);
-        armAngleLeft = ARMMAXLEFT;
-        armAngleRight = ARMMAXRIGHT;
-        break;
-      case 0b00000100:
-        fireUp(fireServo);
-        break;
-      default:
-        break;
-    }
 
+    // DYNAMIC CONTROL OF ARMS
+    // first to set armsUnlocked
     switch (data.armBits) {
       case 0b00000000:
         
@@ -357,6 +320,67 @@ void loop() {
         break;
       
     }
+
+    switch (data.neoPixelBits) {
+      case 0b00000000:
+        // displayEyes(0);
+        break;
+      case 0b00000001:
+        displayEyes(0);
+        break;
+      case 0b00000011:
+        displayEyes(1);
+        break;
+      default:
+        break;
+    }
+    switch (data.servoBits) {
+      case 0b00000000:
+        fireDown(fireServo);
+        // armsUnlocked = false;
+        break;
+      case 0b00000001:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armAngleLeft = ARMMAXLEFT;
+        break;
+      case 0b00000101:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armAngleLeft = ARMMAXLEFT;
+        break;
+      case 0b00000010:
+        armsUnlocked = false;
+        armRight.write(ARMMAXRIGHT);
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      case 0b00000110:
+        armsUnlocked = false;
+        armRight.write(ARMMAXRIGHT);
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      case 0b00000011:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armRight.write(ARMMAXRIGHT);
+        armAngleLeft = ARMMAXLEFT;
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      case 0b00000111:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armRight.write(ARMMAXRIGHT);
+        armAngleLeft = ARMMAXLEFT;
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      case 0b00000100:
+        fireUp(fireServo);
+        break;
+      default:
+        break;
+    }
+
+    
   }
   else{
     // if arm not moving, bring it down

@@ -159,16 +159,26 @@ void setupRF24() {
   // radio.printPrettyDetails();
   Serial.println(F("I am a transmitter"));
 }
+
+int fireUp = 0;
+
 void loop() {
 
   // If the transmit button is pressed, read the switches
   // and send the bits
   
   if (digitalRead(SERVOXMITPIN) == LOW) {  // remember switches are active LOW
-    clearData();
+    // clearData();
+    // shifting bits
     data.servoBits = (digitalRead(SERVOSELPIN0) << 0
                       | digitalRead(SERVOSELPIN1) << 1
                       | digitalRead(SERVOSELPIN2) << 2);
+    if(digitalRead(SERVOSELPIN2)){
+      fireUp = 4;
+    }
+    else{
+      fireUp = 0;
+    }
     radio.stopListening();
     // if(data.servoBits!=prevData.servoBits){ 
       prevData=data; 
@@ -209,7 +219,7 @@ void loop() {
 }  // end of loop()
 void clearData() {
   // set all fields to 0
-  data.servoBits = 0;
+  data.servoBits = 0 + fireUp;
   data.neoPixelBits = 0;
   data.armBits = 0;
 }
