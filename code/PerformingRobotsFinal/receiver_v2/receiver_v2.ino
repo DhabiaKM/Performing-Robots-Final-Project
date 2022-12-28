@@ -47,12 +47,12 @@ unsigned int totalTransmitFailures = 0;
 // Servo motors
 const int SERVO0PIN = A1;
 const int SERVO1PIN = A2;
+const int SERVOPIN3 = A3;
 
 // Neopixels
 #define FACTORYRESET_ENABLE     1
-#define NEOLEFT A3
-#define NEORIGHT A4
-#define NEOPIXELPIN3 A5
+#define NEOLEFT A4
+#define NEORIGHT A5
 #define BRIGHTNESS 30
 
 // define eyes and mouth
@@ -75,13 +75,15 @@ int expressVal = 0;
 // Define Servos
 Servo armLeft;
 Servo armRight;
+Servo fireServo;
 
 // change as per your robot
 const int ARMNEUTRALLEFT = 150;
 const int ARMNEUTRALRIGHT = 20;
 const int ARMMAXLEFT = 0;
 const int ARMMAXRIGHT = 180;
-
+const int FIREDOWN = 0;
+const int FIREUP = 90;
 // structure for data
 struct DataStruct {
   uint8_t servoBits;
@@ -129,10 +131,13 @@ void setupRF24() {
 void setupServoMotors() {
   armLeft.attach(SERVO0PIN);
   armRight.attach(SERVO1PIN);
+  fireServo.attach(SERVOPIN3);
   // Serial.println("Arms attached.");
   armLeft.write(ARMNEUTRALLEFT);
   delay(10);
   armRight.write(ARMNEUTRALRIGHT);
+  delay(10);
+  fireServo.write(FIREDOWN);
   delay(10);
   // Serial.println("Arms set up.");
 }
@@ -230,6 +235,16 @@ void resetArms(int armAngleLeft, int armAngleRight){
   }
 }
 
+// FIRE
+// up
+void fireUp(Servo fireServo){
+  fireServo.write(FIREUP);
+}
+// down
+void fireDown(Servo fireServo){
+  fireServo.write(FIREDOWN);
+}
+
 
 
 //=======================================================================================
@@ -259,7 +274,57 @@ void loop() {
     radio.read(&data, sizeof(data));
     // Serial.print("message received Data = ");
     // Serial.println(data.selectorBits);
+
+    // DYNAMIC CONTROL OF ARMS
+    // first to set armsUnlocked
+    switch (data.armBits) {
+      case 0b00000000:
+        
+        break;
+      case 0b00000001:
+        armsUnlocked = true;
+        if(!armLeftMoving){
+          armLeftMoving = true;
+          armAngleLeft -= 50;
+          armLeft.write(armAngleLeft);     
+          delay(5);
+          buttonPressed = true;
+        }
+        break;
+      case 0b00000010:
+        armsUnlocked = true;
+        if(!armRightMoving){
+          armRightMoving = true;
+          armAngleRight += 50;
+          armRight.write(armAngleRight);
+          delay(5);
+          buttonPressed = true;
+        }
+        break;
+      case 0b00000011:
+        armsUnlocked = true;
+        if(!armLeftMoving){
+          armLeftMoving = true;
+          armAngleLeft -= 50;
+          armLeft.write(armAngleLeft);     
+          delay(5);
+          buttonPressed = true;
+        }
+        if(!armRightMoving){
+          armRightMoving = true;
+          armAngleRight += 50;
+          armRight.write(armAngleRight);
+          delay(5);
+          buttonPressed = true;
+        }
+        break;
+      
+    }
+
     switch (data.neoPixelBits) {
+      case 0b00000000:
+        // displayEyes(0);
+        break;
       case 0b00000001:
         displayEyes(0);
         break;
@@ -271,6 +336,7 @@ void loop() {
     }
     switch (data.servoBits) {
       case 0b00000000:
+        fireDown(fireServo);
         // armsUnlocked = false;
         break;
       case 0b00000001:
@@ -278,7 +344,17 @@ void loop() {
         armLeft.write(ARMMAXLEFT);
         armAngleLeft = ARMMAXLEFT;
         break;
+      case 0b00000101:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armAngleLeft = ARMMAXLEFT;
+        break;
       case 0b00000010:
+        armsUnlocked = false;
+        armRight.write(ARMMAXRIGHT);
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      case 0b00000110:
         armsUnlocked = false;
         armRight.write(ARMMAXRIGHT);
         armAngleRight = ARMMAXRIGHT;
@@ -290,61 +366,21 @@ void loop() {
         armAngleLeft = ARMMAXLEFT;
         armAngleRight = ARMMAXRIGHT;
         break;
+      case 0b00000111:
+        armsUnlocked = false;
+        armLeft.write(ARMMAXLEFT);
+        armRight.write(ARMMAXRIGHT);
+        armAngleLeft = ARMMAXLEFT;
+        armAngleRight = ARMMAXRIGHT;
+        break;
+      case 0b00000100:
+        fireUp(fireServo);
+        break;
       default:
         break;
     }
 
-    switch (data.armBits) {
-      case 0b00000000:
-        break;
-      case 0b00000001:
-        armsUnlocked = true;
-        if(!armLeftMoving){
-          armLeftMoving = true;
-          armAngleLeft -= 50;
-          armLeft.write(armAngleLeft);     
-          delay(5);
-          buttonPressed = true;
-        }
-        break;
-      case 0b00000010:
-        armsUnlocked = true;
-        if(!armRightMoving){
-          armRightMoving = true;
-          armAngleRight += 50;
-          armRight.write(armAngleRight);
-          delay(5);
-          buttonPressed = true;
-        }
-        break;
-      case 0b00000011:
-        armsUnlocked = true;
-        if(!armLeftMoving){
-          armLeftMoving = true;
-          armAngleLeft -= 50;
-          armLeft.write(armAngleLeft);     
-          delay(5);
-          buttonPressed = true;
-        }
-        if(!armRightMoving){
-          armRightMoving = true;
-          armAngleRight += 50;
-          armRight.write(armAngleRight);
-          delay(5);
-          buttonPressed = true;
-        }
-        // expressVal += 1;
-        // if(expressVal%2){
-        //   expressVal = 1;
-        // }
-        // else{
-        //   expressVal = 0;
-        // }
-        // displayEyes(expressVal);
-        break;
-      case 0b00000100:
-        break;
-    }
+    
   }
   else{
     // if arm not moving, bring it down
