@@ -23,6 +23,7 @@ These progress reports are added as progress on the robot is being made. The goa
 7. [Progress Report 7](#report7)
 8. [Progress Report 8](#report8)
 9. [Progress Report 9](#report9)
+10. [Final Progress Report](#report10)
 
 
 
@@ -132,11 +133,29 @@ For today, we finished and added quite a few things to the robot:
   - Right now we are using buttons, but hopefully will transition to the switches soon
 - We also went to the costume shop to find clothing for the robot
 
+
+### Final Progress Report <a name="report10"></a>
+
+**Finals Week and Turbulent Times** 
+
+Here is a list of everything done to get to the final robot:
+- Painted the head and arms -- We decided not to use cloth.
+- Added white paper to the upper half of the body, and created collar, sleeves and a tie with cardboard.
+- Added brown paper to the lower half of the body, and created shoes with cardboard.
+- Coded the movement of the servo arms.
+- Added the little flame pop up for anger's head.
+- Fixed the neopixel library issue by just using lists to target specific neopixels.
+- Coded the Transmitter/Receiver and integrated the control panel into the project (thank you professor!). 
+  
+
+![](/media/paint.jpg)
+![](/media/bodyprogress.jpg)
+![](/media/eyes.jpg)
+
 ## Final Robot Version <a name="Final"></a>
 
-
-## Final Robot Performance <a name="Performance"></a>
-
-## Reflection <a name="FinalReflection"></a>
+and here is our final product in action! The production was a success :> 
+![](/media/final.jpg)
+![](/media/flamefinal.jpg)
 
 
